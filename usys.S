@@ -9,6 +9,7 @@
     ret
 
 SYSCALL(fork)
+SYSCALL(exitS)
 SYSCALL(exit)
 SYSCALL(wait)
 SYSCALL(pipe)

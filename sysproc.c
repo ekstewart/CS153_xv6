@@ -19,7 +19,10 @@ sys_exit(void)
   exit();
   return 0;  // not reached
 }
-
+int sys_exitS(int status) { //FIXME?
+  exitS(status);
+  return 0;
+}
 int
 sys_wait(void)
 {
