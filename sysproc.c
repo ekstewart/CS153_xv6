@@ -19,14 +19,17 @@ sys_exit(void)
   exit();
   return 0;  // not reached
 }
-int sys_exitS(int status) { //FIXME?
-  exitS(status);
+int sys_exitS(void) { //FIXME?
+  int exitStatus = myproc()->status;
+  exitS(exitStatus);
   return 0;
 }
 int
 sys_wait(void)
 {
-  return wait();
+  int* waitStatus;
+  argptr();
+  return wait(NULL);
 }
 
 int

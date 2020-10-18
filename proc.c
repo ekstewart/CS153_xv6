@@ -267,7 +267,7 @@ exit(void)
   panic("zombie exit");
 }
 void
-exit(int status) //FIXME
+exitS(int status) //FIXME
 {
   struct proc *curproc = myproc();
   struct proc *p;
@@ -329,7 +329,7 @@ wait(int* status)
       if(p->state == ZOMBIE){
         // Found one.
         if (status > 0) {
-	  *p = (p->status); // FIXME? check if status exits
+	  *status = (p->status); // FIXME? check if status exits
 	}
         pid = p->pid;
         kfree(p->kstack);

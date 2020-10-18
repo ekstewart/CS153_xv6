@@ -4,7 +4,7 @@ struct rtcdate;
 // system calls
 int fork(void);
 int exit(void) __attribute__((noreturn));
-int exitS(int); // change exit system call FIXME?
+int exitS(void); // change exit system call FIXME?
 //int wait(void);
 int wait(int*); //update wait system call FIXME?
 int pipe(int*);
