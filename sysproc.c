@@ -28,8 +28,8 @@ int
 sys_wait(void)
 {
   int* waitStatus;
-  argptr();
-  return wait(NULL);
+  argptr(0,(void*)&waitStatus, sizeof(*waitStatus));//FIXME?
+  return wait(waitStatus);
 }
 
 int
