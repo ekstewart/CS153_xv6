@@ -6,6 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#define WNOHANG 1
 
 int sys_fork(void)
 {
@@ -28,6 +29,18 @@ int sys_wait(void)
   int *waitStatus;
   argptr(0, (void *)&waitStatus, sizeof(*waitStatus));
   return wait(waitStatus);
+}
+int sys_waitpid(void)
+{
+  int pid;
+  int *waitStatus;
+  // int options;
+
+  if (argint(0, &pid) < 0)
+    return -1;
+
+  argptr(0, (void *)&waitStatus, sizeof(*waitStatus));
+  return waitpid(pid, waitStatus, WNOHANG);
 }
 
 int sys_kill(void)
