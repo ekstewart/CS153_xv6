@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#define WNOHANG 1
 
 struct
 {
@@ -407,6 +408,11 @@ int waitpid(int pid, int *status, int options)
         p->state = UNUSED;
         release(&ptable.lock);
         return pid;
+      }
+      else if (options == WNOHANG)
+      {
+        //WNOHANG
+        return 2;
       }
     }
 
