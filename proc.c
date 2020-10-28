@@ -294,6 +294,7 @@ void exitS(int status)
     }
   }
 
+  curproc->status = status;
   begin_op();
   iput(curproc->cwd);
   end_op();
@@ -314,7 +315,7 @@ void exitS(int status)
         wakeup1(initproc);
     }
   }
-  curproc->status = status; // FIXME?
+  // curproc->status = status; // FIXME?
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   sched();
@@ -343,10 +344,7 @@ int wait(int *status)
       if (p->state == ZOMBIE)
       {
         // Found one.
-        if (status > 0)
-        {
-          *status = (p->status); // FIXME? check if status exits
-        }
+        *status = (p->status);
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
@@ -365,6 +363,7 @@ int wait(int *status)
     if (!havekids || curproc->killed)
     {
       release(&ptable.lock);
+      *status = -1;
       return -1;
     }
 
@@ -386,17 +385,14 @@ int waitpid(int pid, int *status, int options)
     havekids = 0;
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
-      if (p->parent != curproc)
+      if (p->pid != pid)
         continue;
       havekids = 1;
       // processes always become zombies, but in this case wait() picks up and kills the zombies
-      if (p->pid == pid)
+      if (p->state == ZOMBIE)
       {
         // Found one.
-        if (status > 0)
-        {
-          *status = (p->status);
-        }
+        *status = (p->status);
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
@@ -409,17 +405,18 @@ int waitpid(int pid, int *status, int options)
         release(&ptable.lock);
         return pid;
       }
-      else if (options == WNOHANG)
-      {
-        //WNOHANG
-        return 2;
-      }
+      // else if (options == WNOHANG)
+      // {
+      //   //WNOHANG
+      //   return 2;
+      // }
     }
 
     // No point waiting if we don't have any children.
     if (!havekids || curproc->killed)
     {
       release(&ptable.lock);
+      *status = -1;
       return -1;
     }
 
