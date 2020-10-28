@@ -20,7 +20,8 @@ int sys_exit(void)
 }
 int sys_exitS(void)
 {
-  int exitStatus = myproc()->status;
+  int exitStatus;
+  argint(0, &exitStatus);
   exitS(exitStatus);
   return 0;
 }
@@ -34,13 +35,17 @@ int sys_waitpid(void)
 {
   int pid;
   int *waitStatus;
-  // int options;
+  int options;
 
   if (argint(0, &pid) < 0)
     return -1;
 
-  argptr(0, (void *)&waitStatus, sizeof(*waitStatus));
-  return waitpid(pid, waitStatus, WNOHANG);
+  argptr(1, (void *)&waitStatus, sizeof(waitStatus));
+
+  if (argint(2, &options) < 0)
+    return -1;
+
+  return waitpid(pid, waitStatus, options);
 }
 
 int sys_kill(void)
