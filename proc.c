@@ -88,7 +88,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
-
+  p->priority = 10;
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -198,6 +198,7 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
+  np->priority = 10; //FIXME
   *np->tf = *curproc->tf;
 
   // Clear %eax so that fork returns 0 in the child.
@@ -266,6 +267,13 @@ exit(void)
   sched();
   panic("zombie exit");
 }
+
+void set_prior(int prior_lvl) {
+//FIXME
+}
+
+
+
 
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
