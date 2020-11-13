@@ -6,138 +6,50 @@
 int main(int argc, char *argv[])
 {
 
-    int exitWait(void);
-    int waitPid(void);
-    int CELEBW02(void);
+    int priorSchedulerTest(void);      // test for main assignment, not implemented
+    int starvationTest(void);          // test for bonus 1, not implemented
+    int donationInheritanceTest(void); // test for bonus 2, not implemented
+    int performanceTest(void);         // test for bonus 3, not implemented
 
-    printf(1, "\n This program tests the correctness of your lab#1\n");
+    printf(1, "\nThis program tests the correctness of your lab#2\n\n");
 
     if (atoi(argv[1]) == 1)
-        exitWait();
+        priorSchedulerTest();
     else if (atoi(argv[1]) == 2)
-        waitPid();
+        starvationTest();
     else if (atoi(argv[1]) == 3)
-        CELEBW02();
+        donationInheritanceTest();
+    else if (atoi(argv[1]) == 4)
+        performanceTest();
     else
-        printf(1, "\ntype \"lab1 1\" to test exit and wait, \"lab1 2\" to test waitpid and \"lab1 3\" to test the extra credit WNOHANG option \n");
+        printf(1, "\ntype \"lab2 1\" to test priority scheduler, \"lab2 2\" to test starvation \"lab2 3\" to test the donation/inheritance and \n\"lab2 4\" to test scheduling performance");
 
     // End of test
+    printf(1, "\n");
     exit();
     return 0;
 }
 
-int exitWait(void)
+int priorSchedulerTest()
 {
-    int pid, ret_pid, exit_status;
-    int i;
-    // use this part to test exit(int status) and wait(int* status)
-
-    printf(1, "\n  Parts a & b) testing exit(int status) and wait(int* status):\n");
-
-    for (i = 0; i < 2; i++)
-    {
-        pid = fork();
-        if (pid == 0)
-        { // only the child executed this code
-            if (i == 0)
-            {
-                printf(1, "\nThis is child with PID# %d and I will exit with status %d\n", getpid(), 0);
-                exit();
-            }
-            else
-            {
-                printf(1, "\nThis is child with PID# %d and I will exit with status %d\n", getpid(), -1);
-                exitS(-1);
-            }
-        }
-        else if (pid > 0)
-        { // only the parent executes this code
-            ret_pid = wait(&exit_status);
-            printf(1, "\n This is the parent: child with PID# %d has exited with status %d\n", ret_pid, exit_status);
-        }
-        else // something went wrong with fork system call
-        {
-            printf(2, "\nError using fork\n");
-            exitS(-1);
-        }
-    }
+    printf(1, "Running priority scheduler test... unimplemented");
     return 0;
 }
 
-int waitPid(void)
+int starvationTest()
 {
-
-    int ret_pid, exit_status;
-    int i;
-    int pid_a[5] = {0, 0, 0, 0, 0};
-    // use this part to test wait(int pid, int* status, int options)
-
-    printf(1, "\n  Part c) testing waitpid(int pid, int* status, int options):\n");
-
-    for (i = 0; i < 5; i++)
-    {
-        pid_a[i] = fork();
-        if (pid_a[i] == 0)
-        { // only the child executed this code
-            printf(1, "\n The is child with PID# %d and I will exit with status %d\n", getpid(), getpid() + 4);
-            exitS(getpid() + 4);
-        }
-    }
-
-    sleep(5);
-    printf(1, "\n This is the parent: Now waiting for child with PID# %d\n", pid_a[3]);
-    ret_pid = waitpid(pid_a[3], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d\n", ret_pid, exit_status);
-    sleep(5);
-    printf(1, "\n This is the parent: Now waiting for child with PID# %d\n", pid_a[1]);
-    ret_pid = waitpid(pid_a[1], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d\n", ret_pid, exit_status);
-    sleep(5);
-    printf(1, "\n This is the parent: Now waiting for child with PID# %d\n", pid_a[2]);
-    ret_pid = waitpid(pid_a[2], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d\n", ret_pid, exit_status);
-    sleep(5);
-    printf(1, "\n This is the parent: Now waiting for child with PID# %d\n", pid_a[0]);
-    ret_pid = waitpid(pid_a[0], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d\n", ret_pid, exit_status);
-    sleep(5);
-    printf(1, "\n This is the parent: Now waiting for child with PID# %d\n", pid_a[4]);
-    ret_pid = waitpid(pid_a[4], &exit_status, 0);
-    printf(1, "\n This is the partent: Child# %d has exited with status %d\n", ret_pid, exit_status);
-
+    printf(1, "Running starvation test... unimplemented");
     return 0;
 }
 
-int CELEBW02(void)
+int donationInheritanceTest()
 {
+    printf(1, "Running donation/inheritance test... unimplemented");
+    return 0;
+}
 
-    printf(1, "\n  Part e) the waitpid option WNOHANG, test program CELEBW02 \n");
-
-    int pid, retpid;
-    int status;
-
-    if ((pid = fork()) < 0)
-        printf(2, "fork() error");
-    else if (pid == 0)
-    {
-        sleep(5);
-        exitS(1);
-    }
-    else
-        do
-        {
-            if ((retpid = waitpid(pid, &status, WNOHANG)) == -1)
-                printf(2, "wait() error");
-            else if (retpid == 0)
-            {
-                printf(1, "child is still running \n");
-                sleep(1);
-            }
-            else
-            {
-                printf(1, "child exited with status of %d\n", status);
-            }
-        } while (retpid == 0);
-
+int performanceTest()
+{
+    printf(1, "Running performance test... unimplemented");
     return 0;
 }
