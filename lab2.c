@@ -32,7 +32,36 @@ int main(int argc, char *argv[])
 
 int priorSchedulerTest()
 {
-    printf(1, "Running priority scheduler test... unimplemented");
+    // printf(1, "Running priority scheduler test... unimplemented");
+
+    int pids[3];
+    int i = 0;
+    while (i < 3)
+    {
+        pids[i] = fork();
+        printf(1, "creating process with pid: %d\n", pids[i]);
+        if (pids[i] == 0)
+        {
+            break;
+        }
+        i++;
+    }
+
+    if (pids[0])
+    {
+        printf(1, "Catching process with pid: %d\n", pids[0]);
+        wait();
+    }
+    if (pids[1])
+    {
+        printf(1, "Catching process with pid: %d\n", pids[1]);
+        wait();
+    }
+    if (pids[2])
+    {
+        printf(1, "Catching process with pid: %d\n", pids[2]);
+        wait();
+    }
     return 0;
 }
 
