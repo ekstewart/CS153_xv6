@@ -279,6 +279,18 @@ void exit(void)
 void set_prior(int prior_lvl)
 {
   //FIXME
+  struct proc *curproc = myproc();
+  
+  if (prior_lvl == 0) {
+    curproc->priority = 0;
+  }
+  else if (prior_lvl == 31) {
+    curproc->priority = 31;
+  }
+  else {
+    curproc->priority = prior_lvl;
+  }
+ // sched();
 }
 
 // Wait for a child process to exit and return its pid.
@@ -359,11 +371,21 @@ void scheduler(void)
         {
           *ret_p = *p;
           top_prior = p->priority;
-          // p->priority -= 1; // Bonus part 1
+          if ((p->priority -= 1) ==  -1) { // check if out of bounds
+	    p->priority = 0;
+          } // Bonus part 1
+          else {
+            p->priority -= 1;
+          }
         }
         else
         {
-          // p->priority += 1; // Bonus part 1
+          if ((p->priority += 1) == 32) { //check if out of bounds
+	    p->priority = 31;
+          } // Bonus part 1
+          else {
+            (p->priority += 1);
+          } 
         }
       }
     }

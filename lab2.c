@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
     int starvationTest(void);          // test for bonus 1, not implemented
     int donationInheritanceTest(void); // test for bonus 2, not implemented
     int performanceTest(void);         // test for bonus 3, not implemented
-
     printf(1, "\nThis program tests the correctness of your lab#2\n\n");
 
     if (atoi(argv[1]) == 1)
@@ -49,11 +48,12 @@ int priorSchedulerTest()
 
     if (pids[0])
     {
+        changePriority(12);
         printf(1, "Catching process with pid: %d\n", pids[0]);
         wait();
     }
     if (pids[1])
-    {
+    {  
         printf(1, "Catching process with pid: %d\n", pids[1]);
         wait();
     }
