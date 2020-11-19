@@ -281,11 +281,11 @@ void set_prior(int prior_lvl)
   //FIXME
   struct proc *curproc = myproc();
 
-  if (prior_lvl == 0)
+  if (prior_lvl < 0)
   {
     curproc->priority = 0;
   }
-  else if (prior_lvl == 31)
+  else if (prior_lvl > 31)
   {
     curproc->priority = 31;
   }
@@ -354,7 +354,7 @@ int wait(void)
 void scheduler(void) //TODO
 {
   struct proc *p;
-  struct proc *ret_p = ptable.proc;
+  struct proc *ret_p;
   int top_prior = -1;
   struct cpu *c = mycpu();
   c->proc = 0;
@@ -366,40 +366,16 @@ void scheduler(void) //TODO
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    {
-      if (p->state == RUNNABLE)
-      {
-        if (p->priority > top_prior)
-        {
-          *ret_p = *p;
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if (p->state == RUNNABLE){
+        if (p->priority >= top_prior){
+          ret_p = p;
           top_prior = p->priority;
-          if ((p->priority -= 1) == -1)
-          { // check if out of bounds
-            p->priority = 0;
-          } // Bonus part 1
-          else
-          {
-            p->priority -= 1;
-          }
-        }
-        else
-        {
-          if ((p->priority += 1) == 32)
-          { //check if out of bounds
-            p->priority = 31;
-          } // Bonus part 1
-          else
-          {
-            (p->priority += 1);
-          }
         }
       }
-      //}
+    }
 
-      if (ret_p->state != RUNNABLE)
-        break;
-
+    if (top_prior >= 0 && ret_p != 0 && ret_p->state == RUNNABLE){
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -408,10 +384,12 @@ void scheduler(void) //TODO
       ret_p->state = RUNNING;
       swtch(&(c->scheduler), ret_p->context);
       switchkvm();
+
+      // Process is done running for now.
+      // It should have changed its p->state before coming back.
+      c->proc = 0;
+      ret_p->priority = 0;
     }
-    // Process is done running for now.
-    // It should have changed its p->state before coming back.
-    c->proc = 0;
     release(&ptable.lock);
   }
 }
