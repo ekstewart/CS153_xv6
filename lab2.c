@@ -33,7 +33,9 @@ int PScheduler(void){
 		changePriority(30-10*i);	
 		for (j=0;j<50000;j++) {
 			for(k=0;k<1000;k++) {
-				asm("nop"); }}
+				asm("nop"); 
+            }
+        }
 		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),30-10*i);		
 		exit();
         }
@@ -46,10 +48,9 @@ int PScheduler(void){
 	if(pid > 0) {
 		for (i = 0; i <  3; i++) {
 			wait();
-
 		}
-                     printf(1,"\n if processes with highest priority finished first then its correct \n");
-}
+        printf(1,"\n if processes with highest priority finished first then its correct \n");
+    }
 	exit();		
-	return 0;
-	}
+    return 0;
+}
