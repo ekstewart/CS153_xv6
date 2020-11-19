@@ -280,17 +280,20 @@ void set_prior(int prior_lvl)
 {
   //FIXME
   struct proc *curproc = myproc();
-  
-  if (prior_lvl == 0) {
+
+  if (prior_lvl == 0)
+  {
     curproc->priority = 0;
   }
-  else if (prior_lvl == 31) {
+  else if (prior_lvl == 31)
+  {
     curproc->priority = 31;
   }
-  else {
+  else
+  {
     curproc->priority = prior_lvl;
   }
- // sched();
+  // sched();
 }
 
 // Wait for a child process to exit and return its pid.
@@ -348,7 +351,7 @@ int wait(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
-void scheduler(void)
+void scheduler(void) //TODO
 {
   struct proc *p;
   struct proc *ret_p = ptable.proc;
@@ -371,37 +374,41 @@ void scheduler(void)
         {
           *ret_p = *p;
           top_prior = p->priority;
-          if ((p->priority -= 1) ==  -1) { // check if out of bounds
-	    p->priority = 0;
+          if ((p->priority -= 1) == -1)
+          { // check if out of bounds
+            p->priority = 0;
           } // Bonus part 1
-          else {
+          else
+          {
             p->priority -= 1;
           }
         }
         else
         {
-          if ((p->priority += 1) == 32) { //check if out of bounds
-	    p->priority = 31;
+          if ((p->priority += 1) == 32)
+          { //check if out of bounds
+            p->priority = 31;
           } // Bonus part 1
-          else {
+          else
+          {
             (p->priority += 1);
-          } 
+          }
         }
       }
-    //}
+      //}
 
-    if (ret_p->state != RUNNABLE)
-      break;
+      if (ret_p->state != RUNNABLE)
+        break;
 
-    // Switch to chosen process.  It is the process's job
-    // to release ptable.lock and then reacquire it
-    // before jumping back to us.
-    c->proc = ret_p;
-    switchuvm(ret_p);
-    ret_p->state = RUNNING;
-    swtch(&(c->scheduler), ret_p->context);
-    switchkvm();
-    } 
+      // Switch to chosen process.  It is the process's job
+      // to release ptable.lock and then reacquire it
+      // before jumping back to us.
+      c->proc = ret_p;
+      switchuvm(ret_p);
+      ret_p->state = RUNNING;
+      swtch(&(c->scheduler), ret_p->context);
+      switchkvm();
+    }
     // Process is done running for now.
     // It should have changed its p->state before coming back.
     c->proc = 0;
