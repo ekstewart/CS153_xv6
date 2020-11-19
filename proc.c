@@ -351,7 +351,7 @@ int wait(void)
 void scheduler(void)
 {
   struct proc *p;
-  struct proc *ret_p;
+  struct proc *ret_p = ptable.proc;
   int top_prior = -1;
   struct cpu *c = mycpu();
   c->proc = 0;
@@ -388,7 +388,7 @@ void scheduler(void)
           } 
         }
       }
-    }
+    //}
 
     if (ret_p->state != RUNNABLE)
       break;
@@ -399,14 +399,12 @@ void scheduler(void)
     c->proc = ret_p;
     switchuvm(ret_p);
     ret_p->state = RUNNING;
-
     swtch(&(c->scheduler), ret_p->context);
     switchkvm();
-
+    } 
     // Process is done running for now.
     // It should have changed its p->state before coming back.
     c->proc = 0;
-
     release(&ptable.lock);
   }
 }
