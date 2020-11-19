@@ -78,7 +78,10 @@ sys_sleep(void)
 }
 int sys_changePriority(void) {
  //FIXME
- set_prior(myproc()->priority);
+ int priority;
+ if (argint(0, &priority) < 0)
+   return -1;
+ set_prior(priority);
  return 0;
 }  
 
