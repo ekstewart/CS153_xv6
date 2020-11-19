@@ -1,84 +1,55 @@
 #include "types.h"
 #include "user.h"
 
-#define WNOHANG 1
-
 int main(int argc, char *argv[])
 {
+	
+	int PScheduler(void);
 
-    int priorSchedulerTest(void);      // test for main assignment, not implemented
-    int starvationTest(void);          // test for bonus 1, not implemented
-    int donationInheritanceTest(void); // test for bonus 2, not implemented
-    int performanceTest(void);         // test for bonus 3, not implemented
-    printf(1, "\nThis program tests the correctness of your lab#2\n\n");
-
-    if (atoi(argv[1]) == 1)
-        priorSchedulerTest();
-    else if (atoi(argv[1]) == 2)
-        starvationTest();
-    else if (atoi(argv[1]) == 3)
-        donationInheritanceTest();
-    else if (atoi(argv[1]) == 4)
-        performanceTest();
-    else
-        printf(1, "\ntype \"lab2 1\" to test priority scheduler, \"lab2 2\" to test starvation \"lab2 3\" to test the donation/inheritance and \n\"lab2 4\" to test scheduling performance");
-
-    // End of test
-    printf(1, "\n");
-    exit();
-    return 0;
+  printf(1, "\n This program tests the correctness of your lab#2\n");
+  
+	PScheduler();
+	return 0;
 }
+  
+    
+int PScheduler(void){
+    // use this part to test the priority scheduler. Assuming that the priorities range between range between 0 to 31
+    // 0 is the highest priority and 31 is the lowest priority.
+    int pid;
+    int i,j,k;
+  
+    printf(1, "\n  Step 2: testing the priority scheduler and setpriority(int priority)) systema call:\n");
+    printf(1, "\n  Step 2: Assuming that the priorities range between range between 0 to 31\n");
+    printf(1, "\n  Step 2: 0 is the highest priority. All processes have a default priority of 10\n");
+    printf(1, "\n  Step 2: The parent processes will switch to priority 0\n");
+    changePriority(0);
+    for (i = 0; i <  3; i++) {
+	pid = fork();
+	if (pid > 0 ) {
+		continue;}
+	else if ( pid == 0) {
 
-int priorSchedulerTest()
-{
-    // printf(1, "Running priority scheduler test... unimplemented");
-
-    int pids[3];
-    int i = 0;
-    while (i < 3)
-    {
-        pids[i] = fork();
-        printf(1, "creating process with pid: %d\n", pids[i]);
-        if (pids[i] == 0)
-        {
-            break;
+		changePriority(30-10*i);	
+		for (j=0;j<50000;j++) {
+			for(k=0;k<1000;k++) {
+				asm("nop"); }}
+		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),30-10*i);		
+		exit();
         }
-        i++;
-    }
+        else {
+			printf(2," \n Error \n");
+			
+        }
+	}
 
-    if (pids[0])
-    {
-        changePriority(12);
-        printf(1, "Catching process with pid: %d\n", pids[0]);
-        wait();
-    }
-    if (pids[1])
-    {  
-        printf(1, "Catching process with pid: %d\n", pids[1]);
-        wait();
-    }
-    if (pids[2])
-    {
-        printf(1, "Catching process with pid: %d\n", pids[2]);
-        wait();
-    }
-    return 0;
-}
+	if(pid > 0) {
+		for (i = 0; i <  3; i++) {
+			wait();
 
-int starvationTest()
-{
-    printf(1, "Running starvation test... unimplemented");
-    return 0;
+		}
+                     printf(1,"\n if processes with highest priority finished first then its correct \n");
 }
-
-int donationInheritanceTest()
-{
-    printf(1, "Running donation/inheritance test... unimplemented");
-    return 0;
-}
-
-int performanceTest()
-{
-    printf(1, "Running performance test... unimplemented");
-    return 0;
-}
+	exit();		
+	return 0;
+	}
