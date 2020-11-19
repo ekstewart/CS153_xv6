@@ -355,7 +355,7 @@ void scheduler(void) //TODO
 {
   struct proc *p;
   struct proc *ret_p;
-  int top_prior = -1;
+  int top_prior = 32;
   struct cpu *c = mycpu();
   c->proc = 0;
 
@@ -368,14 +368,14 @@ void scheduler(void) //TODO
     acquire(&ptable.lock);
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if (p->state == RUNNABLE){
-        if (p->priority >= top_prior){
+        if (p->priority <= top_prior){
           ret_p = p;
           top_prior = p->priority;
         }
       }
     }
 
-    if (top_prior >= 0 && ret_p != 0 && ret_p->state == RUNNABLE){
+    if (top_prior <= 31 && ret_p != 0 && ret_p->state == RUNNABLE){
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -388,7 +388,7 @@ void scheduler(void) //TODO
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       c->proc = 0;
-      ret_p->priority = 0;
+      top_prior = 32; 
     }
     release(&ptable.lock);
   }
