@@ -42,7 +42,7 @@ int PScheduler(void){
 			    	asm("nop"); 
                 }
             }
-		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),30-10*i);		
+		printf(1, "\n child# %d with priority %d has finished! \n",getpid(), getPriority());  //30-10*i);		
 		exit();
         }
         else {
@@ -63,19 +63,31 @@ int PScheduler(void){
 int starvationTest(){
     int pid;
     int i,j,k;
-    int numprocesses = 8;
+    int numprocesses = 2;
     for (i = 0; i <  numprocesses; i++){
 	    pid = fork();
 	    if (pid > 0 ) {
 		    continue;}
 	    else if ( pid == 0) {
-		    changePriority(30-10*i);	
+            int initPrior = getPriority();
+            if(i == 0){
+                initPrior = 10;
+            }else if(i == 1){
+                initPrior = 15;
+            }else if(i == 2){
+                initPrior = 30;
+            }
+
+
+            // int initPrior =30-10*i; 
+		    changePriority(initPrior);	
 		    for (j=0;j<50000;j++) {
 			    for(k=0;k<1000;k++) {
 			    	asm("nop"); 
                 }
             }
-		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),30-10*i);		
+		printf(1, "\n child# %d with priority %d has finished! \n",getpid(),getPriority());	
+        printf(1, "\n child# %d started with a priority of %d. \n",getpid(),initPrior);		
 		exit();
         }
         else {
