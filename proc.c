@@ -351,7 +351,7 @@ int wait(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
-void scheduler(void) //TODO
+void scheduler(void) //TODO Lab2
 {
   struct proc *p;
   struct proc *ret_p;
@@ -368,13 +368,20 @@ void scheduler(void) //TODO
     acquire(&ptable.lock);
     for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if (p->state == RUNNABLE){
-        if (p->priority <= top_prior){
-          ret_p = p;
-          top_prior = p->priority;
+        if (p->priority <= top_prior){ // if the current process has a higher or same priority
+          ret_p = p;                   // set the process as our ret_p (return process)
+          top_prior = p->priority;     // reassign new highest priority
+        }else{ // if runnable process gets skipped over
+          if(p->priority > 0){ // bounds checking, don't want negative priorities
+            p->priority -= 1; 
+          }
         }
       }
     }
-
+    if(ret_p->priority < 31)
+      ret_p->priority += 1; // Age highest priority process
+    
+    // Check to see if the top_prior changed. Also check to make sure ret_p is a non-null, valid process
     if (top_prior <= 31 && ret_p != 0 && ret_p->state == RUNNABLE){
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -388,7 +395,7 @@ void scheduler(void) //TODO
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       c->proc = 0;
-      top_prior = 32; 
+      top_prior = 32; // Reset 'highest priority'
     }
     release(&ptable.lock);
   }
