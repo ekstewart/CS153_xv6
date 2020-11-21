@@ -278,7 +278,6 @@ void exit(void)
 
 void set_prior(int prior_lvl)
 {
-  //FIXME
   struct proc *curproc = myproc();
 
   if (prior_lvl < 0)
@@ -293,7 +292,11 @@ void set_prior(int prior_lvl)
   {
     curproc->priority = prior_lvl;
   }
-  // sched();
+}
+
+int get_priority(){
+  struct proc *curproc = myproc();
+  return curproc->priority;
 }
 
 // Wait for a child process to exit and return its pid.

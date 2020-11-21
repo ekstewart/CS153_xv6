@@ -77,13 +77,16 @@ sys_sleep(void)
   return 0;
 }
 int sys_changePriority(void) {
- //FIXME
  int priority;
  if (argint(0, &priority) < 0)
    return -1;
  set_prior(priority);
  return 0;
 }  
+
+int sys_getPriority(void){
+  return get_priority();
+}
 
 // return how many clock tick interrupts have occurred
 // since start.
