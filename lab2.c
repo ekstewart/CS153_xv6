@@ -11,8 +11,10 @@ int main(int argc, char *argv[])
         PScheduler();
     else if (atoi(argv[1]) == 2)
         starvationTest();
-
-	PScheduler();
+    else
+        printf(1, "\n Please enter an argument for which test you want to run ex: \"lab2 1\"\n");
+    
+	exit();
 	return 0;
 }
   
