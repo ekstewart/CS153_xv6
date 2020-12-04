@@ -15,7 +15,7 @@
 
 // Fetch the int at addr from the current process.
 int
-fetchint(uint addr, int *ip)
+fetchint(uint addr, int *ip)//TODO part 1
 {
   struct proc *curproc = myproc();
 
@@ -29,7 +29,7 @@ fetchint(uint addr, int *ip)
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
 int
-fetchstr(uint addr, char **pp)
+fetchstr(uint addr, char **pp)//TODO part 1
 {
   char *s, *ep;
   struct proc *curproc = myproc();
@@ -56,7 +56,7 @@ argint(int n, int *ip)
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
 int
-argptr(int n, char **pp, int size)
+argptr(int n, char **pp, int size)//TODO part 1
 {
   int i;
   struct proc *curproc = myproc();

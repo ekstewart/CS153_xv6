@@ -78,6 +78,12 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
 
+  case T_PGFLT: //TODO part 2
+    // 1, release the page guard
+    // 2, allocate new page for stack and another page for page guard
+    // 3, print to console the stack increase
+    break;
+
   //PAGEBREAK: 13
   default:
     if(myproc() == 0 || (tf->cs&3) == 0){
