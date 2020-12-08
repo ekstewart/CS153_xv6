@@ -15,11 +15,12 @@
 
 // Fetch the int at addr from the current process.
 int
-fetchint(uint addr, int *ip)//TODO part 1
+fetchint(uint addr, int *ip)//DONE part 1
 {
   struct proc *curproc = myproc();
 
-  if(addr >= curproc->sz || addr+4 > curproc->sz)
+  //if(addr >= curproc->sz || addr+4 > curproc->sz)
+  if(addr <= curproc->sz || addr-4 < curproc->sz) // FIXME Second comparison might need to be removed
     return -1;
   *ip = *(int*)(addr);
   return 0;
@@ -29,12 +30,12 @@ fetchint(uint addr, int *ip)//TODO part 1
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
 int
-fetchstr(uint addr, char **pp)//TODO part 1
+fetchstr(uint addr, char **pp)//DONE part 1
 {
   char *s, *ep;
   struct proc *curproc = myproc();
 
-  if(addr >= curproc->sz)
+  if(addr <= curproc->sz)
     return -1;
   *pp = (char*)addr;
   ep = (char*)curproc->sz;
@@ -56,14 +57,14 @@ argint(int n, int *ip)
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
 int
-argptr(int n, char **pp, int size)//TODO part 1
+argptr(int n, char **pp, int size)//DONE part 1
 {
   int i;
   struct proc *curproc = myproc();
  
   if(argint(n, &i) < 0)
     return -1;
-  if(size < 0 || (uint)i >= curproc->sz || (uint)i+size > curproc->sz)
+  if(size < 0 || (uint)i <= curproc->sz || (uint)i-size < curproc->sz)// FIXME comparison might need removal
     return -1;
   *pp = (char*)i;
   return 0;
@@ -77,7 +78,7 @@ int
 argstr(int n, char **pp)
 {
   int addr;
-  if(argint(n, &addr) < 0)
+  if(argint(n, &addr) < 0) // TODO part 1 Might need to flip comparison
     return -1;
   return fetchstr(addr, pp);
 }
