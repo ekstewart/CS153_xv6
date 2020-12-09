@@ -17,11 +17,11 @@
 int
 fetchint(uint addr, int *ip)//DONE part 1
 {
-  struct proc *curproc = myproc();
+//  struct proc *curproc = myproc();
 
   //if(addr >= curproc->sz || addr+4 > curproc->sz)
-  if(addr <= curproc->sz || addr-4 < curproc->sz) // FIXME Second comparison might need to be removed
-    return -1;
+  //if(addr <= curproc->sz) // FIXME Second comparison might need to be removed
+   // return -1;
   *ip = *(int*)(addr);
   return 0;
 }
@@ -35,8 +35,8 @@ fetchstr(uint addr, char **pp)//DONE part 1
   char *s, *ep;
   struct proc *curproc = myproc();
 
-  if(addr <= curproc->sz)
-    return -1;
+ // if(addr <= curproc->sz)
+  //  return -1;
   *pp = (char*)addr;
   ep = (char*)curproc->sz;
   for(s = *pp; s < ep; s++){
@@ -60,11 +60,9 @@ int
 argptr(int n, char **pp, int size)//DONE part 1
 {
   int i;
-  struct proc *curproc = myproc();
+  //struct proc *curproc = myproc();
  
   if(argint(n, &i) < 0)
-    return -1;
-  if(size < 0 || (uint)i <= curproc->sz || (uint)i-size < curproc->sz)// FIXME comparison might need removal
     return -1;
   *pp = (char*)i;
   return 0;

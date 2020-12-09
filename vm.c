@@ -337,6 +337,23 @@ copyuvm(pde_t *pgdir, uint sz) //TODO part 1
       goto bad;
     }
   }
+  struct proc* h = myproc();
+  //need to keep track of size of stack, uses var in proc.c (numStackPages) 
+  for(i = (KERNBASE -0x04) - h->numStackPages * PGSIZE + 4; i < KERNBASE - 0x04; i += PGSIZE){
+    if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
+      panic("copyuvm: pte should exist");
+    if(!(*pte & PTE_P))
+      panic("copyuvm: page not present");
+    pa = PTE_ADDR(*pte);
+    flags = PTE_FLAGS(*pte);
+    if((mem = kalloc()) == 0)
+      goto bad;
+    memmove(mem, (char*)P2V(pa), PGSIZE);
+    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
+      kfree(mem);
+      goto bad;
+    }
+  }
   return d;
 
 bad:
