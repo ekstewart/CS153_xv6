@@ -15,12 +15,12 @@
 
 // Fetch the int at addr from the current process.
 int
-fetchint(uint addr, int *ip)//TODO part 1
+fetchint(uint addr, int *ip)//DONE part 1
 {
-  struct proc *curproc = myproc();
+  // struct proc *curproc = myproc();
 
-  if(addr >= curproc->sz || addr+4 > curproc->sz)
-    return -1;
+  // if(addr >= curproc->sz || addr+4 > curproc->sz)
+  //   return -1;
   *ip = *(int*)(addr);
   return 0;
 }
@@ -29,16 +29,17 @@ fetchint(uint addr, int *ip)//TODO part 1
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
 int
-fetchstr(uint addr, char **pp)//TODO part 1
+fetchstr(uint addr, char **pp)//DONE part 1
 {
-  char *s, *ep;
-  struct proc *curproc = myproc();
+  // char *s, *ep;
+  char *s;
+  // struct proc *curproc = myproc();
 
-  if(addr >= curproc->sz)
-    return -1;
-  *pp = (char*)addr;
-  ep = (char*)curproc->sz;
-  for(s = *pp; s < ep; s++){
+  // if(addr <= curproc->sz)
+  //   return -1;
+  *pp = (char*)addr; // point to first char of string
+  // ep = (char*)curproc->sz;
+  for(s = *pp; /*s < ep*/ ; s++){ // Remove loop condition, loop until null terminator
     if(*s == 0)
       return s - *pp;
   }
@@ -56,15 +57,15 @@ argint(int n, int *ip)
 // to a block of memory of size bytes.  Check that the pointer
 // lies within the process address space.
 int
-argptr(int n, char **pp, int size)//TODO part 1
+argptr(int n, char **pp, int size)//DONE part 1
 {
   int i;
-  struct proc *curproc = myproc();
+  // struct proc *curproc = myproc();
  
   if(argint(n, &i) < 0)
     return -1;
-  if(size < 0 || (uint)i >= curproc->sz || (uint)i+size > curproc->sz)
-    return -1;
+  // if(size < 0 || (uint)i <= curproc->sz || (uint)i-size < curproc->sz)
+  //   return -1;
   *pp = (char*)i;
   return 0;
 }
