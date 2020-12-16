@@ -78,12 +78,20 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
 
-  case T_PGFLT: //TODO part 2
+  case T_PGFLT: {     //TODO part 2
     // 1, release the page guard
     // 2, allocate new page for stack and another page for page guard
     // 3, print to console the stack increase
+    struct proc  *curproc = myproc();
+    uint CR2 = rcr2();
+    if (allocuvm(curproc->pgdir, PGROUNDDOWN(CR2),CR2)==0) {
+      panic("Error in T_PGFLT");
+    }
+    curproc->numStackPages++;
+    cprintf("Growing stack... \n");
+    
     break;
-
+  }
   //PAGEBREAK: 13
   default:
     if(myproc() == 0 || (tf->cs&3) == 0){

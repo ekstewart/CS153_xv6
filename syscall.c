@@ -32,14 +32,14 @@ fetchint(uint addr, int *ip)//DONE part 1
 int
 fetchstr(uint addr, char **pp)//DONE part 1
 {
-  char *s, *ep;
-  struct proc *curproc = myproc();
+  char *s; //, *ep;
+ // struct proc *curproc = myproc();
 
  // if(addr <= curproc->sz)
   //  return -1;
   *pp = (char*)addr;
-  ep = (char*)curproc->sz;
-  for(s = *pp; s < ep; s++){
+ // ep = (char*)curproc->sz;
+  for(s = *pp;; s++){
     if(*s == 0)
       return s - *pp;
   }

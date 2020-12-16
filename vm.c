@@ -339,7 +339,7 @@ copyuvm(pde_t *pgdir, uint sz) //TODO part 1
   }
   struct proc* h = myproc();
   //need to keep track of size of stack, uses var in proc.c (numStackPages) 
-  for(i = (KERNBASE -0x04) - h->numStackPages * PGSIZE + 4; i < KERNBASE - 0x04; i += PGSIZE){
+  for(i = (KERNBASE -0x01) - h->numStackPages * PGSIZE + 1; i < KERNBASE - 0x01; i += PGSIZE){
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
       panic("copyuvm: pte should exist");
     if(!(*pte & PTE_P))
