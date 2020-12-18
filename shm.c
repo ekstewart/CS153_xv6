@@ -46,7 +46,9 @@ int shm_open(int id, char **pointer) {
       exists = 1;
       break;
     }
-    entry = i;
+    else if (shm_table.shm_pages[i].id == 0) {
+      entry = i;
+    }
   }
   if (exists == 0) {
     shm_table.shm_pages[entry].id = id; //initialize id to id passed to us
